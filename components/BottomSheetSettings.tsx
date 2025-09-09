@@ -1,8 +1,9 @@
 
 import React, { useMemo, forwardRef, useImperativeHandle, useRef } from 'react';
-import BottomSheet, { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import type { BottomSheetMethods } from '@gorhom/bottom-sheet';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { colors, commonStyles } from '../styles/commonStyles';
+import { colors } from '../styles/commonStyles';
 
 export type BottomSheetSettingsRef = {
   open: () => void;
@@ -10,57 +11,63 @@ export type BottomSheetSettingsRef = {
 };
 
 interface Props {
-  onReset: () => Promise&lt;void&gt;;
+  onReset: () => Promise<void>;
 }
 
-const BottomSheetSettings = forwardRef&lt;BottomSheetSettingsRef, Props&gt;(({ onReset }, ref) =&gt; {
-  const snapPoints = useMemo(() =&gt; ['35%'], []);
-  const sheetRef = useRef&lt;BottomSheet&gt;(null);
+const BottomSheetSettings = forwardRef<BottomSheetSettingsRef, Props>(({ onReset }, ref) => {
+  const snapPoints = useMemo(() => ['35%'], []);
+  const sheetRef = useRef<BottomSheetMethods>(null);
 
-  useImperativeHandle(ref, () =&gt; ({
-    open: () =&gt; {
+  useImperativeHandle(ref, () => ({
+    open: () => {
       console.log('Opening settings sheet');
       sheetRef.current?.expand();
     },
-    close: () =&gt; {
+    close: () => {
       console.log('Closing settings sheet');
       sheetRef.current?.close();
     },
   }));
 
   return (
-    &lt;BottomSheet
+    <BottomSheet
       ref={sheetRef}
       index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose
       backgroundStyle={{ backgroundColor: colors.backgroundAlt, borderRadius: 18 }}
       handleIndicatorStyle={{ backgroundColor: '#D1D5DB' }}
-    &gt;
-      &lt;BottomSheetView style={{ paddingHorizontal: 20, paddingVertical: 10 }}&gt;
-        &lt;Text style={styles.title}&gt;Settings&lt;/Text&gt;
-        &lt;TouchableOpacity
+    >
+      <BottomSheetView style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        <Text style={styles.title}>Settings</Text>
+        <TouchableOpacity
           style={[styles.actionBtn, { backgroundColor: '#FFF0F0', borderColor: '#FEE2E2' }]}
-          onPress={() =&gt; {
+          onPress={() => {
             Alert.alert('Reset all data?', 'This will delete all transactions.', [
               { text: 'Cancel', style: 'cancel' },
-              { text: 'Reset', style: 'destructive', onPress: async () =&gt; { await onReset(); sheetRef.current?.close(); } }
+              {
+                text: 'Reset',
+                style: 'destructive',
+                onPress: async () => {
+                  await onReset();
+                  sheetRef.current?.close();
+                },
+              },
             ]);
           }}
-        &gt;
-          &lt;Text style={[styles.actionText, { color: colors.red }]}&gt;Reset Data&lt;/Text&gt;
-        &lt;/TouchableOpacity&gt;
-        &lt;View style={{ height: 10 }} /&gt;
-        &lt;View style={[styles.info, { display: 'contents' as any }]}&gt;
-          &lt;Text style={styles.small}&gt;Cash Tracker v1&lt;/Text&gt;
-          &lt;Text style={styles.small}&gt;All data is stored locally on your device.&lt;/Text&gt;
-        &lt;/View&gt;
-      &lt;/BottomSheetView&gt;
-    &lt;/BottomSheet&gt;
+        >
+          <Text style={[styles.actionText, { color: colors.red }]}>Reset Data</Text>
+        </TouchableOpacity>
+        <View style={{ height: 10 }} />
+        <View style={[styles.info, { display: 'contents' as any }]}>
+          <Text style={styles.small}>Cash Tracker v1</Text>
+          <Text style={styles.small}>All data is stored locally on your device.</Text>
+        </View>
+      </BottomSheetView>
+    </BottomSheet>
   );
 });
 
-// Add display name for ESLint react/display-name rule compliance
 BottomSheetSettings.displayName = 'BottomSheetSettings';
 
 const styles = StyleSheet.create({
