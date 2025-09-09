@@ -5,7 +5,7 @@ import React from 'react';
 
 import { Transaction } from '../data/types';
 
-const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' });
+const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'SGD' });
 
 export default function TransactionItem({ item }: { item: Transaction }) {
   const isIncome = item.type === 'income';
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor: colors.backgroundAlt,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E5E7EB',

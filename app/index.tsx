@@ -8,16 +8,30 @@ import BottomSheetSettings, { BottomSheetSettingsRef } from '../components/Botto
 import { useRef } from 'react';
 import { useTransactions } from '../hooks/useTransactions';
 
-const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' });
+const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'SGD' });
 
 export default function HomeScreen() {
   const settingsRef = useRef<BottomSheetSettingsRef>(null);
-  const { balance, monthly, transactions, clearAll } = useTransactions();
+  const {
+    accounts,
+    selectedAccount,
+    selectedAccountId,
+    switchAccount,
+
+    balance,
+    monthly,
+    transactions,
+    clearAll,
+
+    createAccount,
+    deleteAccount,
+    renameAccount,
+  } = useTransactions();
 
   return (
     <View style={[commonStyles.container]}>
       <View style={commonStyles.header}>
-        <Text style={commonStyles.headerTitle}>Cash</Text>
+        <Text style={commonStyles.headerTitle}>{selectedAccount?.name || 'Cash'}</Text>
         <View style={commonStyles.row}>
           <TouchableOpacity
             onPress={() => router.push('/history')}
@@ -44,7 +58,7 @@ export default function HomeScreen() {
               boxShadow: '0px 2px 8px rgba(0,0,0,0.12)',
             }}
           >
-            <Text style={{ color: '#fff', fontFamily: 'Roboto_700Bold' }}>Settings</Text>
+            <Text style={{ color: '#fff', fontFamily: 'Roboto_700Bold' }}>Manage</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -94,7 +108,16 @@ export default function HomeScreen() {
         ) : null}
       </ScrollView>
 
-      <BottomSheetSettings ref={settingsRef} onReset={clearAll} />
+      <BottomSheetSettings
+        ref={settingsRef}
+        accounts={accounts}
+        selectedAccountId={selectedAccountId}
+        onSwitchAccount={switchAccount}
+        onCreateAccount={createAccount}
+        onRenameAccount={renameAccount}
+        onDeleteAccount={deleteAccount}
+        onReset={clearAll}
+      />
     </View>
   );
 }

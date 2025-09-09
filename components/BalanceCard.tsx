@@ -8,7 +8,7 @@ interface BalanceCardProps {
   expense: number;
 }
 
-const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' });
+const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'SGD' });
 
 export default function BalanceCard({ balance, income, expense }: BalanceCardProps) {
   return (

@@ -8,3 +8,9 @@ export interface Transaction {
   date: string; // ISO
   type: TransactionType;
 }
+
+export interface Account {
+  id: string;
+  name: string;
+  createdAt: string; // ISO
+}
